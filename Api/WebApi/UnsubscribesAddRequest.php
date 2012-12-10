@@ -1,6 +1,6 @@
 <?php
 
-namespace Savch\SendgridBundle\Api\Webapi;
+namespace Savch\SendgridBundle\Api\WebApi;
 
 use Savch\SendgridBundle\Api\Request;
 
