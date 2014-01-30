@@ -1,0 +1,13 @@
+services:
+    SendGrid.SendGridService:
+        class: SendGrid
+        arguments:
+            username: "%sendgrid.api_user%"
+            password: "%sendgrid.api_key%"
+    
+    SendGrid.SendGridMailerService:
+        class:      Ferenda\UserBundle\Service\SendGridTemplatingMailerService
+        arguments:
+            sendGrid: "@SendGrid.SendGridService"
+            templating: "@templating"
+            router: "@router"

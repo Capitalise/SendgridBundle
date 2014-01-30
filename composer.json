@@ -1,0 +1,25 @@
+{
+    "name": "byng-systems/sendgrid-bundle",
+    "authors": [
+        {
+            "name": "Andriy Savchenko"
+        },
+        {
+            "name": "Byng Systems Ltd",
+            "email": "matthew.ward@byng-systems.com",
+            "homepage": "http://www.byng-systems.com",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["sendgrid", "mail", "email", "web service", "smtp"],
+    "require": {
+        "symfony/templating": ">=2.4.1",
+        "mashape/unirest-php": "dev-master",
+        "sendgrid/sendgrid": "~1.1.7"
+    },
+    "target-dir": "Savch/SendgridBundle",
+    "autoload": {
+        "psr-0": { "Savch\\SendgridBundle": "" }
+    },
+    "minimum-stability": "dev"
+}

@@ -3,7 +3,7 @@
 namespace Savch\SendgridBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -23,12 +23,12 @@ class SavchSendgridExtension extends Extension
     {
         $processor = new Processor();
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('sendgrid.xml');
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('services.yml');
 
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
-
+        
         foreach (array('api_key', 'api_user', 'logging', 'adapter') as $attribute) {
             $container->setParameter('savch_sendgrid.'.$attribute, $config[$attribute]);
         }
