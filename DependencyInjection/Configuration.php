@@ -31,7 +31,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('api_user')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('logging')->defaultValue('%kernel.debug%')->end()
-                ->scalarNode('adapter')->defaultValue('Savch\SendgridBundle\HttpAdapter\BuzzHttpAdapter')->end()
             ->end();
 
         return $treeBuilder;
