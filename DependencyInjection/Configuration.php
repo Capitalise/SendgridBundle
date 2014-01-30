@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sendgrid');
+        $rootNode = $treeBuilder->root('savch_sendgrid');
 
         $rootNode
             ->addDefaultsIfNotSet()
