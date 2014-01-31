@@ -6,8 +6,9 @@ services:
             password: "%savch_sendgrid.api_key%"
     
     SendGrid.SendGridMailerService:
-        class:      Ferenda\UserBundle\Service\SendGridTemplatingMailerService
+        class:      Savch\SendgridBundle\Service\SendGridTemplatingMailerService
         arguments:
-            sendGrid: "@SendGrid.SendGridService"
-            templating: "@templating"
-            router: "@router"
+            sendGrid:               "@SendGrid.SendGridService"
+            templating:             "@templating"
+            router:                 "@router"
+            throwExceptionsOnFail:  true
