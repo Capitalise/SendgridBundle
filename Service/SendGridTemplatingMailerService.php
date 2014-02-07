@@ -165,6 +165,10 @@ class SendGridTemplatingMailerService
             $email->setBccs($bcc);
         }
         
+        if (isset($additionalHeaders["reply-to"])) {
+            $email->setReplyTo($additionalHeaders["reply-to"]);
+        }
+        
         return $email;
     }
     
