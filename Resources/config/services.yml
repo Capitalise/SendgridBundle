@@ -10,5 +10,4 @@ services:
         arguments:
             sendGrid:               "@SendGrid.SendGridService"
             templating:             "@templating"
-            router:                 "@router"
             throwExceptionsOnFail:  true
