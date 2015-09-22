@@ -100,10 +100,10 @@ class SendGridTemplatingMailerService
         $this->throwExceptionsOnFail = ($throwExceptionsOnFail === true);
     }
         
-    public function sendHtmlEmail(array $from, array $to, $subject, $bodyHtml, array $additionalHeaders = array())
+    public function sendHtmlEmail(array $from, array $to, $subject, $bodyHtml, array $additionalHeaders = array(), $attachments = null)
     {
         // 
-        $email = static::buildBaseEmail($from, $to, $subject, $additionalHeaders);
+        $email = static::buildBaseEmail($from, $to, $subject, $additionalHeaders, $attachments);
         
         // If the given body is a TemplatedEmailBody object, populate and reassign the string value to itself
         if ($bodyHtml instanceof TemplatedEmailBody) {
@@ -139,7 +139,7 @@ class SendGridTemplatingMailerService
         return $result;
     }
     
-    protected static function buildBaseEmail(array $from, array $to, $subject, array $additionalHeaders = array())
+    protected static function buildBaseEmail(array $from, array $to, $subject, array $additionalHeaders = array(), $attachments = null)
     {
         $email = new Email();
         
@@ -167,6 +167,10 @@ class SendGridTemplatingMailerService
         
         if (isset($additionalHeaders["reply-to"])) {
             $email->setReplyTo($additionalHeaders["reply-to"]);
+        }
+
+        if (isset($attachments)) {
+            $email->setAttachments($attachments);
         }
         
         return $email;
