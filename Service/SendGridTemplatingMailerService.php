@@ -100,7 +100,7 @@ class SendGridTemplatingMailerService
         $this->throwExceptionsOnFail = ($throwExceptionsOnFail === true);
     }
         
-    public function sendHtmlEmail(array $from, array $to, $subject, $bodyHtml, array $additionalHeaders = array(), $attachments = null)
+    public function sendHtmlEmail(array $from, array $to, $subject, $bodyHtml, array $additionalHeaders = array(), array $attachments = null)
     {
         // 
         $email = static::buildBaseEmail($from, $to, $subject, $additionalHeaders, $attachments);
@@ -139,7 +139,7 @@ class SendGridTemplatingMailerService
         return $result;
     }
     
-    protected static function buildBaseEmail(array $from, array $to, $subject, array $additionalHeaders = array(), $attachments = null)
+    protected static function buildBaseEmail(array $from, array $to, $subject, array $additionalHeaders = array(), array $attachments = null)
     {
         $email = new Email();
         
