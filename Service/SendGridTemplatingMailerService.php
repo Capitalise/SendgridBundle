@@ -12,8 +12,12 @@
 namespace Savch\SendgridBundle\Service;
 
 use SendGrid;
+use SendGrid\Attachment;
+use SendGrid\Content;
 use SendGrid\Email;
-use StdClass;
+use SendGrid\Mail;
+use SendGrid\Personalization;
+use SendGrid\Response;
 use Savch\SendgridBundle\Exception\MailNotSentException;
 use Savch\SendgridBundle\Model\TemplatedEmailBody;
 use Symfony\Bundle\TwigBundle\TwigEngine;
@@ -48,22 +52,15 @@ class SendGridTemplatingMailerService
     protected $throwExceptionsOnFail;
 
     /**
-     * @var array
-     */
-    private $credentials;
-
-    /**
      *
      * @param SendGrid   $sendGrid
      * @param TwigEngine $templating
      * @param boolean    $throwExceptionsOnFail
-     * @param array      $credentials
      */
-    public function __construct(SendGrid $sendGrid, TwigEngine $templating, $throwExceptionsOnFail = true, $credentials = array())
+    public function __construct(SendGrid $sendGrid, TwigEngine $templating, $throwExceptionsOnFail = true)
     {
         $this->sendGrid = $sendGrid;
         $this->templating = $templating;
-        $this->credentials = $credentials;
 
         $this->setThrowExceptionsOnFail($throwExceptionsOnFail);
     }
@@ -78,8 +75,7 @@ class SendGridTemplatingMailerService
     }
 
     /**
-     *
-     * @return type
+     * @return SendGrid
      */
     protected function getSendGrid()
     {
@@ -106,7 +102,7 @@ class SendGridTemplatingMailerService
 
     public function sendHtmlEmail(array $from, array $to, $subject, $bodyHtml, array $additionalHeaders = array(), array $attachments = null)
     {
-        //
+        // Build base email
         $email = static::buildBaseEmail($from, $to, $subject, $additionalHeaders, $attachments);
 
         // If the given body is a TemplatedEmailBody object, populate and reassign the string value to itself
@@ -117,25 +113,34 @@ class SendGridTemplatingMailerService
             )->getContent();
         }
 
-        $email->setHtml($bodyHtml);
+        $content = new Content("text/html", $bodyHtml);
+        $email->addContent($content);
 
-        return $this->processResponse($this->sendGrid->web->send($email));
+        return $this->processResponse($this->sendGrid->client->mail()->send()->post($email));
     }
 
     /**
+     * @param Response $response
      *
-     * @param type $response
-     *
-     * @return boolean
+     * @return bool
+     * @throws MailNotSentException
      */
-    protected function processResponse(StdClass $response, $throwExceptionOnFail = true) {
-        $result = (isset($response->message) && $response->message == "success");
+    protected function processResponse(Response $response) {
+        $result = (empty($response->body()) && ($response->statusCode() === 200 || $response->statusCode() === 202));
 
         if ($result === false && $this->throwExceptionsOnFail === true) {
+
+            $body = json_decode($response->body(), true);
+
+            $hasErrors = !is_null($response->headers())
+                && $response->body()
+                && array_key_exists('errors', $body)
+                && is_array($body['errors']);
+
             throw new MailNotSentException(
                 (
-                    isset($response->errors) && is_array($response->errors)
-                    ? implode(";", $response->errors)
+                $hasErrors
+                    ? implode("", $response->headers()) . implode(" ", $body['errors'][0])
                     : "No error information given"
                 )
             );
@@ -144,30 +149,48 @@ class SendGridTemplatingMailerService
         return $result;
     }
 
+    /**
+     * @param array      $from
+     * @param array      $to
+     * @param            $subject
+     * @param array      $additionalHeaders
+     * @param array|null $attachments
+     *
+     * @return Mail
+     */
     protected static function buildBaseEmail(array $from, array $to, $subject, array $additionalHeaders = array(), array $attachments = null)
     {
-        $email = new Email();
-
         $fromAddress = current(array_keys($from));
         $fromName = current($from);
 
-        $email->setFrom($fromAddress)
-              ->setFromName($fromName)
-              ->setSubject($subject);
+        $fromObj = new Email($fromName, $fromAddress);
+
+        $email = new Mail();
+        $email->setFrom($fromObj);
+        $email->setSubject($subject);
+
+        $personalization = new Personalization();
 
         // Set to headers
         foreach ($to as $toAddress => $toName) {
-            $email->addTo($toAddress, $toName);
+            $toObj = new Email($toName, $toAddress);
+            $personalization->addTo($toObj);
         }
 
         // Set CC header if a value is given
-        if (isset($additionalHeaders["cc"]) && is_array(($cc = $additionalHeaders["cc"]))) {
-            $email->setCcs($cc);
+        if (isset($additionalHeaders["cc"]) && is_array(($ccs = $additionalHeaders["cc"]))) {
+            foreach ($ccs as $ccAddress => $ccName) {
+                $ccObj = new Email($ccName, $ccAddress);
+                $personalization->addCc($ccObj);
+            }
         }
 
         // Set BCC header if a valud is given
-        if (isset($additionalHeaders["bcc"]) && is_array(($bcc = $additionalHeaders["bcc"]))) {
-            $email->setBccs($bcc);
+        if (isset($additionalHeaders["bcc"]) && is_array(($bccs = $additionalHeaders["bcc"]))) {
+            foreach ($bccs as $bccAddress => $bccName) {
+                $bccObj = new Email($bccName, $bccAddress);
+                $personalization->addBcc($bccObj);
+            }
         }
 
         if (isset($additionalHeaders["reply-to"])) {
@@ -175,8 +198,18 @@ class SendGridTemplatingMailerService
         }
 
         if (isset($attachments)) {
-            $email->setAttachments($attachments);
+
+            foreach ($attachments as $attachmentPath) {
+                $attachment = new Attachment();
+                $attachment->setContent(base64_encode(file_get_contents($attachmentPath)));
+                $attachment->setFilename(basename($attachmentPath));
+                $attachment->setDisposition("attachment");
+                $email->addAttachment($attachment);
+            }
         }
+
+        $email->addPersonalization($personalization);
+        $email->addPersonalization($personalization);
 
         return $email;
     }
@@ -186,20 +219,17 @@ class SendGridTemplatingMailerService
      *
      * @param string $email
      *
-     * @return \Unirest\HttpResponse
+     * @return SendGrid\Response
      */
     public function unsubscribeEmail($email)
     {
-        $url = "https://api.sendgrid.com/api/unsubscribes.add.json";
+        $request = [
+            "recipient_emails" => [
+                $email
+            ]
+        ];
 
-        $form             = array();
-        $form['api_user'] = $this->credentials['username'];
-        $form['api_key']  = $this->credentials['password'];
-        $form['email']    = $email;
-
-        $response = \Unirest::post($url, array(), $form);
-
-        return $response;
+        return $this->sendGrid->client->asm()->suppressions()->global()->post($request);
     }
 
 }

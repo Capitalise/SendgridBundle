@@ -14,8 +14,7 @@
     "keywords": ["sendgrid", "mail", "email", "web service", "smtp"],
     "require": {
         "symfony/templating": ">=2.4.1",
-        "mashape/unirest-php": "dev-master",
-        "sendgrid/sendgrid": "~1.1.7"
+        "sendgrid/sendgrid": "~5.1"
     },
     "target-dir": "Savch/SendgridBundle",
     "autoload": {

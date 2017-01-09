@@ -1,16 +1,12 @@
 services:
-    SendGrid.SendGridService:
+    sendgrid.sendgridservice:
         class: SendGrid
         arguments:
-            username: "%savch_sendgrid.api_user%"
             password: "%savch_sendgrid.api_key%"
 
-    SendGrid.SendGridMailerService:
+    sendgrid.sendgridmailerservice:
         class:      Savch\SendgridBundle\Service\SendGridTemplatingMailerService
         arguments:
-            sendGrid:               "@SendGrid.SendGridService"
+            sendGrid:               "@sendgrid.sendgridservice"
             templating:             "@templating"
             throwExceptionsOnFail:  true
-            credentials:
-                username: "%savch_sendgrid.api_user%"
-                password: "%savch_sendgrid.api_key%"

@@ -28,8 +28,8 @@ class SavchSendgridExtension extends Extension
 
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
-        
-        foreach (array('api_key', 'api_user', 'logging') as $attribute) {
+
+        foreach (array('api_key', 'logging') as $attribute) {
             $container->setParameter('savch_sendgrid.'.$attribute, $config[$attribute]);
         }
     }
