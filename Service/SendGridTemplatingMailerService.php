@@ -209,7 +209,6 @@ class SendGridTemplatingMailerService
         }
 
         $email->addPersonalization($personalization);
-        $email->addPersonalization($personalization);
 
         return $email;
     }
