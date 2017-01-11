@@ -1,9 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "b5b67de7c4ec87dd092fd6f825ce68ff",
+    "hash": "c2d9f051f33167a4719de833e6ce67ff",
+    "content-hash": "6da381dd811ade4d4cbbfbc8cc0636d2",
     "packages": [
         {
             "name": "mashape/unirest-php",
@@ -11,26 +13,71 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Mashape/unirest-php.git",
-                "reference": "f3af9e81967489a8256829906ce4524d41cbf250"
+                "reference": "842c0f242dfaaf85f16b72e217bf7f7c19ab12cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Mashape/unirest-php/zipball/f3af9e81967489a8256829906ce4524d41cbf250",
-                "reference": "f3af9e81967489a8256829906ce4524d41cbf250",
+                "url": "https://api.github.com/repos/Mashape/unirest-php/zipball/842c0f242dfaaf85f16b72e217bf7f7c19ab12cb",
+                "reference": "842c0f242dfaaf85f16b72e217bf7f7c19ab12cb",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "require-dev": {
-                "vierbergenlars/simpletest": "*"
+                "codeclimate/php-test-reporter": "0.1.*",
+                "phpunit/phpunit": "~4.4"
+            },
+            "suggest": {
+                "ext-json": "Allows using JSON Bodies for sending and parsing requests"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Unirest": "lib"
+                    "Unirest\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Unirest PHP",
+            "homepage": "https://github.com/Mashape/unirest-php",
+            "keywords": [
+                "client",
+                "curl",
+                "http",
+                "https",
+                "rest"
+            ],
+            "time": "2016-08-11 17:49:21"
+        },
+        {
+            "name": "sendgrid/php-http-client",
+            "version": "3.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sendgrid/php-http-client.git",
+                "reference": "3c4c35eafd364ebcfdbb0a37f655417beed8ee0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/3c4c35eafd364ebcfdbb0a37f655417beed8ee0f",
+                "reference": "3c4c35eafd364ebcfdbb0a37f655417beed8ee0f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SendGrid\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -39,52 +86,56 @@
             ],
             "authors": [
                 {
-                    "name": "Mashape",
-                    "email": "support@mashape.com",
-                    "homepage": "http://mashape.com"
+                    "name": "Matt Bernier",
+                    "email": "dx@sendgrid.com"
+                },
+                {
+                    "name": "Elmer Thomas",
+                    "email": "elmer@thinkingserious.com"
                 }
             ],
-            "description": "Unirest PHP",
-            "homepage": "https://github.com/Mashape/unirest-php",
+            "description": "HTTP REST client, simplified for PHP",
+            "homepage": "http://github.com/sendgrid/php-http-client",
             "keywords": [
-                "client",
-                "curl",
+                "api",
+                "fluent",
                 "http",
-                "rest"
+                "rest",
+                "sendgrid"
             ],
-            "time": "2014-01-14 18:34:19"
+            "time": "2016-11-17 22:45:31"
         },
         {
             "name": "sendgrid/sendgrid",
-            "version": "1.1.7",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sendgrid/sendgrid-php.git",
-                "reference": "b92e51bbe90f6896fe30f863025fc31701d5410c"
+                "reference": "46f85e69ec6a36d4674e7131e442fbecdaa5d183"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/b92e51bbe90f6896fe30f863025fc31701d5410c",
-                "reference": "b92e51bbe90f6896fe30f863025fc31701d5410c",
+                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/46f85e69ec6a36d4674e7131e442fbecdaa5d183",
+                "reference": "46f85e69ec6a36d4674e7131e442fbecdaa5d183",
                 "shasum": ""
             },
             "require": {
-                "mashape/unirest-php": "dev-master",
-                "php": ">=5.3",
-                "swiftmailer/swiftmailer": "~5.0.1"
+                "php": ">=5.6",
+                "sendgrid/php-http-client": "~3.5"
             },
             "replace": {
                 "sendgrid/sendgrid-php": "*"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*",
-                "vlucas/phpdotenv": "1.0.2"
+                "phpunit/phpunit": "4.*",
+                "squizlabs/php_codesniffer": "2.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "SendGrid": "lib/"
-                }
+                "files": [
+                    "lib/SendGrid.php",
+                    "lib/helpers/mail/Mail.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -98,7 +149,7 @@
                 "send",
                 "sendgrid"
             ],
-            "time": "2014-01-08 00:20:31"
+            "time": "2016-11-17 23:05:01"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -155,12 +206,12 @@
             "target-dir": "Symfony/Component/Templating",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Templating.git",
+                "url": "https://github.com/symfony/templating.git",
                 "reference": "a622689a75f60593168fab019a0b15152967ea78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Templating/zipball/a622689a75f60593168fab019a0b15152967ea78",
+                "url": "https://api.github.com/repos/symfony/templating/zipball/a622689a75f60593168fab019a0b15152967ea78",
                 "reference": "a622689a75f60593168fab019a0b15152967ea78",
                 "shasum": ""
             },
@@ -203,20 +254,12 @@
             "time": "2014-01-07 13:29:57"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "mashape/unirest-php": 20
-    },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
 }
